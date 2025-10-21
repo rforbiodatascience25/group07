@@ -16,8 +16,35 @@ author:
 
 # Plots
 
+Now, finally, we get to the part where we can see the fruits of our labor and get to answer the question for this lab: **What genes are significantly up- or down-regulated between the patients with/without early metastasis?**
+
+Using $⍺ = 0.05$ as the threshold for significance we get the following plots:
+
 ## Volcano plot
 
 hola
 
 ## Forest plot
+
+```{r}
+gravier_estimates |>
+        filter(is_significant == "yes") |>
+        mutate(gene = fct_reorder(gene, estimate)) |>
+        ggplot(aes(x = estimate, y = gene)) +
+        geom_point() +
+        geom_errorbarh(aes(xmin = conf.low, xmax = conf.high)) +
+        geom_vline(xintercept = 0) +
+        labs(
+                title = "Genes Associated with Early Metastasis in Small Node-Negative Breast Carcinoma",
+                caption = "data from DOI: 10.1002/gcc.20820",
+                y = "",
+                x = "Estimates (95%CIs)"
+        ) +
+        theme_minimal()
+```
+
+This forest plot represents 43 genes that were either up-/down-regulated. To the left of the plot we see the down-regulated and on the right we see the up-regulated genes.
+
+Here, ‘Estimate’ denotes the statistical association (effect size) between each gene and early metastasis risk, with the horizontal bars representing the confidence interval for each gene’s estimated effect.
+
+Just to make an observation, we can see that the g1CNS91 is highly up-regulated in patients with Early metastasis in this specific cancer.
