@@ -15,6 +15,17 @@ x <- 3
 x
 ```
 
+### New feature
+
+```{r}
+library(purrr)
+```
+
+```{r}
+x <- c("a", "b", "c")
+pluck(x, 2)
+```
+
 ## Maria Vizcaya
 
 hola 3
