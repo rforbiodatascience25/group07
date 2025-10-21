@@ -12,6 +12,10 @@ author:
   - name: Renata Piatkova - s250186
 ---
 
+# DISCLAIMER
+
+This is a straight copy from the report from last week, but done in a collaborative environment! (We hope that's enough)
+
 # Libraries
 
 ```{r}
@@ -62,7 +66,7 @@ write_csv2(file = "03_gravier_clean_aug.gz", x = gravier_clean_aug)
 
 ```
 
-# Data analysis 
+# Data analysis
 
 ```{r}
 #| label: Data analysis
@@ -110,9 +114,6 @@ Now, finally, we get to the part where we can see the fruits of our labor and ge
 Using $⍺ = 0.05$ as the threshold for significance we get the following plots:
 
 ## Volcano plot
-
-```{}
-```
 
 ```{r}
 gravier_estimates |> 
