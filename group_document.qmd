@@ -8,6 +8,17 @@ editor: visual
 
 My name is Angel, and I love data science
 
+### New header - fiesta
+
+Hola guapa
+
+```{r}
+library(tidyverse)
+iris %>% 
+  ggplot(aes(x = Sepal.Length, y = Petal.Length)) +
+  geom_point()
+```
+
 ## Renata Pyatkova
 
 ```{r}
@@ -18,3 +29,7 @@ x
 ## Maria Vizcaya
 
 hola 3
+
+I am maría
+
+it is working
