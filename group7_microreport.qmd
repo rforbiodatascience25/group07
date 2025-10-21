@@ -1,0 +1,23 @@
+---
+title: "Lab 7 Assignment: Group 07"
+format:
+  html:
+    embed-resources: true
+editor: visual
+author:
+  - name: María Vizcaya Garrido - s253703
+  - name: Marianna Gordin - s250440
+  - name: Angel Molina Guillen - s253697
+  - name: Louise Kirkegaard - s215038
+  - name: Renata Piatkova - s250186
+---
+
+# Libraries, obtaining data and wrangling
+
+# Plots
+
+## Volcano plot
+
+hola
+
+## Forest plot
