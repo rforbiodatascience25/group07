@@ -12,7 +12,96 @@ author:
   - name: Renata Piatkova - s250186
 ---
 
-# Libraries, obtaining data and wrangling
+# Libraries
+
+```{r}
+#| warning: false 
+library("tidyverse")
+library("broom")
+library("ggrepel")
+```
+
+# Load data
+
+```{r}
+#| label: Data loading
+raw_dir <- "data/_raw/"
+data_file <- "gravier.RData"
+data_loc <- "https://github.com/ramhiser/datamicroarray/raw/master/data/"
+
+if( !dir.exists(raw_dir) ){
+  dir.create(path = raw_dir)
+}
+if( !file.exists(str_c(raw_dir, data_file)) ){
+  download.file(
+    url = str_c(data_loc, data_file),
+    destfile = str_c(raw_dir, data_file))
+}
+load(file = str_c(raw_dir, data_file))
+
+```
+
+# Data wrangling
+
+```{r}
+#| label: Data wrangling
+#Cleaning the data, following the steps from the book
+gravier_clean <- gravier |>
+  bind_cols() |>
+  as_tibble()
+
+write_csv2(file = "02_gravier_clean.gz", x = gravier_clean)
+
+#Augmenting the data
+gravier_clean_aug <- gravier_clean |>
+  mutate(y = case_when(y == "poor" ~ 1,
+                       y == "good" ~ 0)) |> 
+  relocate(early_metastasis = y)
+
+write_csv2(file = "03_gravier_clean_aug.gz", x = gravier_clean_aug)
+
+```
+
+# Data analysis 
+
+```{r}
+#| label: Data analysis
+gravier_clean_aug_long <- gravier_clean_aug |> 
+        pivot_longer(cols = starts_with("g"),
+                     names_to = "gene",
+                     values_to = "log2_expr_lvl")
+
+gravier_clean_aug_long_nested <- gravier_clean_aug_long |> 
+        group_by(gene) |> 
+        nest() |> 
+        ungroup()
+
+gravier_clean_aug_long_nested <- gravier_clean_aug_long_nested |> 
+        group_by(gene) |> 
+        mutate(model_object = map(.x = data,
+                                  .f = ~lm(formula = log2_expr_lvl ~ early_metastasis, data = .x))
+               )
+
+gravier_clean_aug_long_nested <- gravier_clean_aug_long_nested |> 
+        group_by(gene) |> 
+        mutate(model_object = map(.x = data,
+                                  .f = ~lm(formula = log2_expr_lvl ~ early_metastasis, data = .x)),
+               model_object_tidy = map(.x = model_object,
+                                       .f = ~tidy(.x, conf.int = T, conf.level = 0.95)))
+
+gravier_estimates <- gravier_clean_aug_long_nested |> 
+        unnest(model_object_tidy)
+
+gravier_estimates <- gravier_estimates |> 
+        filter(term == "early_metastasis") |> 
+        select(gene, p.value, estimate, conf.low, conf.high) |> 
+        ungroup()
+
+gravier_estimates <- gravier_estimates |> 
+        mutate(q.value = p.adjust(p.value),
+               is_significant = if_else(q.value <= 0.05, "yes", "no")) 
+
+```
 
 # Plots
 
