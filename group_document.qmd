@@ -22,3 +22,7 @@ hola 3
 I am maría
 
 it is working
+
+```{r}
+pi<-3,14
+```
