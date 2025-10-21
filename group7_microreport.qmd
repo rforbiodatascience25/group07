@@ -18,6 +18,30 @@ author:
 
 ## Volcano plot
 
-hola
+```{}
+```
+
+```{r}
+gravier_estimates |> 
+        drop_na() |> 
+        mutate(log10 = -log10(p.value)) |> 
+        ggplot(aes(x = estimate, y = log10)) +
+        geom_point(aes(color = is_significant), alpha = 0.5) +
+        geom_text_repel(
+        aes(color = is_significant, label = if_else(is_significant == "yes", gene, NA_character_)),
+        size = 3,
+        show.legend = FALSE,
+        max.overlaps = Inf
+        ) +
+        labs(
+                title = "Genes Associated with Early Metastasis in Small Node-Negative Breast Carcinoma",
+                subtitle = "highlighted in turquoise were significant after multiple testing correction",
+                y = "-log10(p)",
+                x = "Estimate",
+                caption = "data from DOI: 10.1002/gcc.20820"
+        ) +
+        guides(color = "none") +
+        theme_minimal()
+```
 
 ## Forest plot
